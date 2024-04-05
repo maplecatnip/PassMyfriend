@@ -1,12 +1,17 @@
 # PassMyfriend
 To store, retrieve, update, and delete passwords using encryption for enhanced security.
+
 PassMyfriend is a simple yet secure and user-friendly way to manage your passwords locally for people who barely know coding and cybersecurity. Utilizing strong encryption, it ensures that your passwords are stored securely and are accessible only through a master password you set. It's simply adaptable across various platforms.
 
 # Features
 Secure Password Storage: Encrypts passwords before saving them to the database.
+
 Password Retrieval: Decrypts and displays passwords stored in the database.
+
 Password Management: Allows adding new passwords, updating existing ones, and deleting passwords.
+
 Password Generation: Generates password that meets password polices (lowercase letter, uppercase letter, digit, and special character)
+
 Master Password: Secures access to the password manager with a master password.
 
 
