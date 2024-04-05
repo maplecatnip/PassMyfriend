@@ -1,11 +1,6 @@
 from cryptography.fernet import Fernet
 import sqlite3
 import getpass  # For hiding the input of passwords
-import os
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, 'password_manager.db')
-
 
 # Key management
 def generate_key(password):
@@ -43,13 +38,7 @@ def decrypt_message(encrypted_message, key):
     decrypted_message = fernet.decrypt(encrypted_message)
     return decrypted_message.decode()
 
-# Database Operations
-import os
-
-# Assuming your script and database are in the same directory
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR, "password_manager.db")
-
+# Database Creation
 def create_db():
     db_path = "/absolute/path/to/your/database.db"
     print(f"Connecting to database at: {db_path}")
@@ -67,6 +56,8 @@ def create_db():
 
     connection.commit()
     connection.close()
+
+
 # User Interface and Functionality
 def menu():
     print("\nPassword Manager")
