@@ -1,11 +1,12 @@
 # PassMyfriend
 To store, retrieve, update, and delete passwords using encryption for enhanced security.
-PassMyfriend is a simple yet secure and user-friendly way to manage your passwords locally for people who barely know coding and cybersecurity. Utilizing strong encryption, it ensures that your passwords are stored securely and are accessible only through a master password you set.
+PassMyfriend is a simple yet secure and user-friendly way to manage your passwords locally for people who barely know coding and cybersecurity. Utilizing strong encryption, it ensures that your passwords are stored securely and are accessible only through a master password you set. It's simply adaptable across various platforms.
 
 # Features
 Secure Password Storage: Encrypts passwords before saving them to the database.
 Password Retrieval: Decrypts and displays passwords stored in the database.
 Password Management: Allows adding new passwords, updating existing ones, and deleting passwords.
+Password Generation: Generates password that meets password polices (lowercase letter, uppercase letter, digit, and special character)
 Master Password: Secures access to the password manager with a master password.
 
 
@@ -20,7 +21,12 @@ pip install cryptography
 
 Clone or Download the Script: Obtain the script files and place them in a directory of your choice.
 
-Specify database path before use: db_path = "/absolute/path/to/your/database.db"
+# Before use: 
+1. Specify database path: db_path = "/absolute/path/to/your/database.db"
+
+2. For Command prompt: cd /absolute/path/to/your/database.db
+
+
 
 # First Use
 On the first launch, you'll be prompted to set a master password. This password encrypts your key and secures access to the password manager.
