@@ -1,6 +1,12 @@
 from cryptography.fernet import Fernet
 import sqlite3
 import getpass  # For hiding the input of passwords
+import secrets
+import string
+
+
+db_path = "/path/to/your/database_directory"
+
 
 # Key management
 def generate_key(password):
@@ -38,9 +44,9 @@ def decrypt_message(encrypted_message, key):
     decrypted_message = fernet.decrypt(encrypted_message)
     return decrypted_message.decode()
 
-# Database Creation
+
+
 def create_db():
-    db_path = "/absolute/path/to/your/database.db"
     print(f"Connecting to database at: {db_path}")
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
@@ -69,20 +75,54 @@ def menu():
     choice = input("Enter your choice: ")
     return choice
 
+
+# Generate_password Function
+def generate_password(length=20):
+    if length < 4:
+        raise ValueError("Password length must be at least 4 characters")
+
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    while True:
+        password = ''.join(secrets.choice(alphabet) for i in range(length))
+        if (any(c.islower() for c in password) and
+                any(c.isupper() for c in password) and
+                any(c.isdigit() for c in password) and
+                any(c in string.punctuation for c in password)):
+            break
+
+    return password
+
+
 def add_password(key):
     website = input("Website: ")
     username = input("Username: ")
-    password = getpass.getpass("Password: ")
+
+    # Offer choice between entering a password manually or generating one
+    choice = input("Would you like to (1) enter a password manually or (2) generate a secure password? Enter 1 or 2: ")
+    if choice == '1':
+        password = getpass.getpass("Enter your password: ")
+    elif choice == '2':
+        password = generate_password(20)
+        print(f"Generated password: {password}")
+    else:
+        print("Invalid choice. Defaulting to manual password entry.")
+        password = getpass.getpass("Enter your password: ")
+
     encrypted_password = encrypt_message(password, key)
-    connection = sqlite3.connect('password_manager.db')
+
+
+    connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
+
     cursor.execute('''
         INSERT INTO accounts (website, username, password)
         VALUES (?, ?, ?)
     ''', (website, username, encrypted_password))
+
     connection.commit()
     connection.close()
     print("Password added successfully.")
+
 
 def get_password(key):
     website = input("Website: ")
@@ -104,21 +144,39 @@ def get_password(key):
 
 def update_password(key):
     website = input("Website: ")
-    new_password = getpass.getpass("New Password: ")
+
+    # Offer choice between entering a new password manually or generating one
+    choice = input(
+        "Would you like to (1) enter a new password manually or (2) generate a secure password? Enter 1 or 2: ")
+    if choice == '1':
+        new_password = getpass.getpass("New Password: ")
+    elif choice == '2':
+        new_password = generate_password(20)
+        print(f"Generated password: {new_password}")
+    else:
+        print("Invalid choice. Defaulting to manual password entry.")
+        new_password = getpass.getpass("New Password: ")
+
     encrypted_password = encrypt_message(new_password, key)
-    connection = sqlite3.connect('password_manager.db')
+
+    # Use the absolute path for the database
+    connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
+
     cursor.execute('''
         UPDATE accounts
         SET password = ?
         WHERE website = ?
     ''', (encrypted_password, website))
+
     connection.commit()
-    connection.close()
+
     if cursor.rowcount == 0:
         print("Account not found.")
     else:
         print("Password updated successfully.")
+
+    connection.close()
 
 def delete_password():
     website = input("Website to delete: ")
